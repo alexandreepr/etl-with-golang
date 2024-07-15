@@ -14,6 +14,12 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     restart: always
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d etl_database -U mamun"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -36,7 +42,8 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
-      - postgres_db
+      postgres_db:
+        condition: service_healthy
     links:
       - postgres_db:postgres_db
     volumes:
