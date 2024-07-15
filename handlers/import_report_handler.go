@@ -25,6 +25,7 @@ import (
 //       "invalidLojaUltimaCompraCNPJCount": <int>
 //     }
 //   - 400 Bad Request: Invalid importacaoId
+//   - 404 Not Found: Import operation records not found
 //   - 500 Internal Server Error: Server-side processing error
 //
 // The report includes the total number of rows processed, and counts of invalid
@@ -43,6 +44,11 @@ func GetImportReport(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count total rows"})
 		return
 	}
+
+	if totalRows == 0 {
+        ctx.JSON(http.StatusNotFound, gin.H{"error": "No records found for this importacaoId"})
+        return
+    }
 
 	invalidCPFCount, err := repository.CountCPFValidoFalse(importacaoId)
 	if err != nil {
