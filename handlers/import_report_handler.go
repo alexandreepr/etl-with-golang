@@ -9,7 +9,7 @@ import (
 	"fmt"
 )
 
-func GetImportReport(ctx *gin.Context, importRepository repository.ImportRepository) {
+func GetImportReport(ctx *gin.Context) {
 	importacaoIdStr := ctx.Query("importacaoId")
 	fmt.Print(importacaoIdStr)
 	importacaoId, err := uuid.Parse(importacaoIdStr)
@@ -18,25 +18,25 @@ func GetImportReport(ctx *gin.Context, importRepository repository.ImportReposit
 		return
 	}
 
-	totalRows, err := importRepository.CountImportTotalRows(importacaoId)
+	totalRows, err := repository.CountImportTotalRows(importacaoId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count total rows"})
 		return
 	}
 
-	invalidCPFCount, err := importRepository.CountCPFValidoFalse(importacaoId)
+	invalidCPFCount, err := repository.CountCPFValidoFalse(importacaoId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count invalid CPFs"})
 		return
 	}
 
-	invalidLojaMaisFrequenteCNPJCount, err := importRepository.CountLojaMaisFrequenteCNPJValidoFalse(importacaoId)
+	invalidLojaMaisFrequenteCNPJCount, err := repository.CountLojaMaisFrequenteCNPJValidoFalse(importacaoId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count invalid Loja Mais Frequente CNPJ"})
 		return
 	}
 
-	invalidLojaUltimaCompraCNPJCount, err := importRepository.CountLojaUltimaCompraCNPJValidoFalse(importacaoId)
+	invalidLojaUltimaCompraCNPJCount, err := repository.CountLojaUltimaCompraCNPJValidoFalse(importacaoId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to count invalid Loja Ultima Compra CNPJ"})
 		return
