@@ -7,13 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type ImportRepository interface {
-    CountImportTotalRows(importacaoId uuid.UUID) (int64, error)
-    CountCPFValidoFalse(importacaoId uuid.UUID) (int64, error)
-    CountLojaMaisFrequenteCNPJValidoFalse(importacaoId uuid.UUID) (int64, error)
-    CountLojaUltimaCompraCNPJValidoFalse(importacaoId uuid.UUID) (int64, error)
-}
-
 func CountCPFValidoFalse(importacaoId uuid.UUID) (int64, error) {
 	var count int64
 	err := database.DB.Model(&models.Register{}).Where("importacao_id = ? AND cpf_valido = ?", importacaoId, false).Count(&count).Error
