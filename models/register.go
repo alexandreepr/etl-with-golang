@@ -2,10 +2,12 @@ package models
 
 import (
 	"gorm.io/gorm"
+	"github.com/google/uuid"
 )
 
 type Register struct {
 	gorm.Model
+	ImportacaoId       			 uuid.UUID `gorm:"column:importacao_id; type:uuid"`
 	CPF                			 string `gorm:"column:cpf"`
 	CPFValido          			 bool   `gorm:"column:cpf_valido"`
 	Private            			 bool   `gorm:"column:private"`

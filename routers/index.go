@@ -2,7 +2,7 @@ package routers
 
 import (
 	"net/http"
-	"etl-with-golang/controllers"
+	"etl-with-golang/handlers"
 	
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +19,7 @@ func RegisterRoutes(route *gin.Engine) {
 	// V1 Routes
 	v1 := route.Group(basePath)
 	{
-		v1.POST("/file-import", controllers.ImportFile)
+		v1.POST("/file-import", handlers.ImportFile)
+		v1.GET("/import-report", handlers.GetImportReport)
 	}
 }

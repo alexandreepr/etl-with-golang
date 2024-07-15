@@ -3,27 +3,46 @@ package repository
 import (
 	"etl-with-golang/infra/database"
 	"etl-with-golang/infra/logger"
+	"etl-with-golang/models"
+	"github.com/google/uuid"
 )
 
-func Save(model interface{}) interface{} {
-	err := database.DB.Create(model).Error
+type ImportRepository interface {
+    CountImportTotalRows(importacaoId uuid.UUID) (int64, error)
+    CountCPFValidoFalse(importacaoId uuid.UUID) (int64, error)
+    CountLojaMaisFrequenteCNPJValidoFalse(importacaoId uuid.UUID) (int64, error)
+    CountLojaUltimaCompraCNPJValidoFalse(importacaoId uuid.UUID) (int64, error)
+}
+
+func CountCPFValidoFalse(importacaoId uuid.UUID) (int64, error) {
+	var count int64
+	err := database.DB.Model(&models.Register{}).Where("importacao_id = ? AND cpf_valido = ?", importacaoId, false).Count(&count).Error
 	if err != nil {
-		logger.Errorf("error, not save data %v", err)
+		logger.Errorf("error counting CPFValido false: %v", err)
 	}
-	return err
+	return count, err
 }
 
-func Get(model interface{}) interface{} {
-	err := database.DB.Find(model).Error
-	return err
+func CountLojaMaisFrequenteCNPJValidoFalse(importacaoId uuid.UUID) (int64, error) {
+	var count int64
+	err := database.DB.Model(&models.Register{}).Where("importacao_id = ? AND loja_mais_frequente_cnpj_valido = ?", importacaoId, false).Count(&count).Error
+	if err != nil {
+		logger.Errorf("error counting LojaMaisFrequenteCNPJValido false: %v", err)
+	}
+	return count, err
 }
 
-func GetOne(model interface{}) interface{} {
-	err := database.DB.Last(model).Error
-	return err
+func CountLojaUltimaCompraCNPJValidoFalse(importacaoId uuid.UUID) (int64, error) {
+	var count int64
+	err := database.DB.Model(&models.Register{}).Where("importacao_id = ? AND loja_ultima_compra_cnpj_valido = ?", importacaoId, false).Count(&count).Error
+	if err != nil {
+		logger.Errorf("error counting LojaUltimaCompraCNPJValido false: %v", err)
+	}
+	return count, err
 }
 
-func Update(model interface{}) interface{} {
-	err := database.DB.Find(model).Error
-	return err
+func CountImportTotalRows(importacaoId uuid.UUID) (int64, error) {
+	var count int64
+	err := database.DB.Model(&models.Register{}).Where("importacao_id = ?", importacaoId).Count(&count).Error
+	return count, err
 }
