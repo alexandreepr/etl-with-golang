@@ -9,6 +9,26 @@ import (
 	"fmt"
 )
 
+// GetImportReport retrieves a report for a specific import operation.
+//
+// GET /api/v1/import-report
+//
+// Query Parameters:
+//   - importacaoId: UUID of the import operation (required)
+//
+// Responses:
+//   - 200 OK: Report retrieved successfully
+//     {
+//       "totalRows": <int>,
+//       "invalidCPFCount": <int>,
+//       "invalidLojaMaisFrequenteCNPJCount": <int>,
+//       "invalidLojaUltimaCompraCNPJCount": <int>
+//     }
+//   - 400 Bad Request: Invalid importacaoId
+//   - 500 Internal Server Error: Server-side processing error
+//
+// The report includes the total number of rows processed, and counts of invalid
+// CPFs, invalid Loja Mais Frequente CNPJs, and invalid Loja Ultima Compra CNPJs.
 func GetImportReport(ctx *gin.Context) {
 	importacaoIdStr := ctx.Query("importacaoId")
 	fmt.Print(importacaoIdStr)

@@ -9,6 +9,24 @@ import (
 	"os"
 )
 
+// ImportFile handles the file upload for data import.
+// It accepts a .txt file via multipart/form-data, processes its contents,
+// and returns an import ID upon successful processing.
+//
+// POST /api/v1/file-import
+//
+// Request:
+//   - Content-Type: multipart/form-data
+//   - Body: form field "file" containing a .txt file
+//
+// Responses:
+//   - 200 OK: File uploaded and processed successfully
+//     {
+//       "message": "File uploaded and data saved successfully.",
+//       "importacao_id": "<uuid>"
+//     }
+//   - 400 Bad Request: Invalid file or request
+//   - 500 Internal Server Error: Server-side processing error
 func ImportFile(ctx *gin.Context) {
 	file, header, err := ctx.Request.FormFile("file")
 	if err != nil {
