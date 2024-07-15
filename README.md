@@ -60,6 +60,7 @@ This repository is a simple ETL app written in golang (Gin + Air + GORM + Postgr
       "invalidLojaUltimaCompraCNPJCount": <int>
   }
   - 400 Bad Request: Invalid importacaoId
+  - 404 Not Found: Import operation records not found
   - 500 Internal Server Error: Server-side processing error
   ```
 
