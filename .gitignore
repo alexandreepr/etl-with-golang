@@ -17,4 +17,3 @@ vendor/
 vendor/
 .vscode/
 tmp/
-go.sum
